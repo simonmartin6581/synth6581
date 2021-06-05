@@ -175,7 +175,7 @@ class chan_man:
             if note == self.note[c] and source == self.source[c] and self.key_status[c] <= OSC_CONTINUE:
                 self.note[c] = new_note
                 return
-        print "could not find note:", note, self.note
+        print ("could not find note:", note, self.note)
             
     def show_status(self):
         print

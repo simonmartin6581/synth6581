@@ -1,5 +1,6 @@
+song_folder = "song_samples"
 sample_folder = "synth_samples"
-
+song = True
 songs = [['Billie_Jean' , 50], ['Beat_It', 100], ['Bad_guy',100], ['Commando',50], ['Wiz3L',180], ['Wiz4L',200], ['Wiz5L',200], ['Wiz6L',200],
          ['Paperboy', 50], ['Ocean_loader_3',50], ['Oxygen_4', 50], ['Mission_impossible' , 50], ['1942',50], ['Thrust',50], ['Cobra',50],['Lazy_jones',50],
          ['Cybernoid',50]] # columns of 8
@@ -80,8 +81,6 @@ params = {'Pedal' : [[0,1,'lin'], 64],
 }
 
 
-sample_folder = "synth_samples"
-
 vc_on = [0,1,2] # All three voices active
 speed = 0.005 # refesh rate
 
@@ -114,12 +113,12 @@ from signal import signal, SIGINT
 
 def end_prog(signal_received, frame):
     print ("Exiting...")
+    km.close_midi()
     sd.reset_sid()
     sys.exit(0)
 
 samp_1 = songs[song_num][0]
 
-song = True
 fps = songs[song_num][1]
 if song and fps:
     refresh_time = 1.0/fps
@@ -137,17 +136,16 @@ sd.set_control_mode('') # User options NEG, BLOCK, HALF, VELOCITY - should be pa
     
 lvls = level_man.levels(params) # create a level manager class for this synth
 
-km = key_man.keys('KeyLab') # Set up the midi keyboard
+km = key_man.keys('KeyLab','') # Set up the midi keyboard
 
-km.set_up_arpeg(21, 48, 12, 0) # define where on the keyboard the arpeggiator exists
 km.set_up_lower_keys(0, 0, 0, 0) 
 km.set_up_upper_keys(48, 109, 0, 0)
 
 onoff = lvls.levels['Loop']
 
-sm = samp_manager.samp_man(sd)
+sm = samp_man.samp_man(sd)
 if song:
-    sm.load_song(samp_1, sample_folder) # defaults to all voices on, note = 60 and frate = 1
+    sm.load_song(samp_1, song_folder) # defaults to all voices on, note = 60 and frate = 1
 else:
     sm.load_samp(samp_1, sample_folder)
 

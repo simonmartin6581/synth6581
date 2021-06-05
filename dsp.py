@@ -47,8 +47,8 @@ TABLE_SIZE = 65536.0
 FRAME_SIZE = 128
 
 #half_sine_phase = np.append(np.arange(int(TABLE_SIZE * 0.1666666),TABLE_SIZE * 0.5,1),np.arange(0, int(TABLE_SIZE * 0.1666666),1))
-half_sine_phase = range(int(TABLE_SIZE * 0.1666666),int(TABLE_SIZE)) + range(int(TABLE_SIZE * 0.1666666))
-half_cos_phase = range(int(TABLE_SIZE * 0.5)) + range(int(TABLE_SIZE * 1.5),int(TABLE_SIZE * 2))
+half_sine_phase = list(range(int(TABLE_SIZE * 0.1666666),int(TABLE_SIZE))) + list(range(int(TABLE_SIZE * 0.1666666)))
+half_cos_phase = list(range(int(TABLE_SIZE * 0.5))) + list(range(int(TABLE_SIZE * 1.5),int(TABLE_SIZE * 2)))
 
 #print half_sine_phase
 rand_table = np.random.random(int(TABLE_SIZE)).astype(np.float32) * 2 - 1

@@ -60,15 +60,18 @@ class keys:
         for i in range(c):
             midi_dev = pygame.midi.get_device_info(i)
             print ("%s name: %s input: %s output: %s opened: %s" % (midi_dev))
-            if midi_name in midi_dev[1] and midi_dev[2]:
+            if midi_name in midi_dev[1].decode() and midi_dev[2]:
                 device = i
         if device:
             print ("Setting device to %s" % device)
             self.midi_dev = pygame.midi.Input(device)
         else:
             self.midi_dev = 'undefined'
-        print "dev",self.midi_dev
+        print ("dev",self.midi_dev)
         return 
+
+    def close_midi(self):
+        self.midi_dev.close()
 
     def get_midi_events(self):
         event_list = []

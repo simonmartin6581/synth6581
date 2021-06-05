@@ -82,7 +82,7 @@ MAXCHANS = 8
 sd = sid_driver.sid()
 sd.reset_sid()
 
-sm = samp_manager.samp_man(sd)
+sm = samp_man.samp_man(sd)
 if song:
     sm.load_song(samp_1, sample_folder) # defaults to all voices on, note = 60 and frate = 1
 else:

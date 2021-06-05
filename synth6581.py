@@ -118,10 +118,11 @@ pedal_down = 0 # This functionality has not been implemented yet
 from signal import signal, SIGINT
 
 def end_prog(signal_received, frame):
+    km.close_midi()
     sd.reset_sid()
     sd.all_sid(24,0)
     pygame.quit() # I can't work out how to prevent the bad pointer exception when I quit pygame
-    patch_name = raw_input("Enter patch name to save or Enter to exit...")
+    patch_name = input("Enter patch name to save or Enter to exit...")
     if patch_name:
         print ("Saving...", patch_name)
         sid.lvls.save_patch(patch_folder, patch_name)
@@ -134,7 +135,7 @@ class sid_synth:
         
         sd.tone_change = False
         
-        self.last_event_time = time.clock()
+        self.last_event_time = time.process_time()
 
         self.adsr_mode = 0 # Whether 
         self.synth_levels = {} # When events arrive they update this dictionary of parameters. 
@@ -146,7 +147,7 @@ class sid_synth:
 
         self.samp_names = samp_names
 
-        self.sm = samp_manager.samp_man(sd) # initialises the sample manager
+        self.sm = samp_man.samp_man(sd) # initialises the sample manager
         for name in samp_names:
             self.sm.load_samp(name, sample_folder) # loads the SID samples to memory
        
@@ -162,7 +163,7 @@ class sid_synth:
         return
     
     def update_synth(self, event_list, level_list): # called cyclicly to process the event list and update the synth paramters
-        if time.clock() - self.last_event_time > 1000:
+        if time.process_time() - self.last_event_time > 1000:
             print ("timed out")
             end_prog()
 
@@ -396,7 +397,7 @@ km.set_up_pads(pad_list)
 
 onoff = lvls.levels['Loop']
 
-last_frame_time = time.clock()
+last_frame_time = time.process_time()
     
 while True:
     event_list, knob_list = km.get_midi_events() # get midi input of keys and knobs
@@ -409,10 +410,10 @@ while True:
         for special in special_list:
             if special == 'next_upper':
                 km.upper_samp = km.pick_next_samp(km.upper_samp)
-                print 'Upper:', km.upper_samp
+                print ('Upper:', km.upper_samp)
             if special == 'next_lower':
                 km.lower_samp = km.pick_next_samp(km.lower_samp)
-                print 'Arpeg:', km.lower_samp
+                print ('Arpeg:', km.lower_samp)
             if special == 'reset_upper':
                 km.upper_samp = 0       
             if special == 'reset_lower':
@@ -439,7 +440,7 @@ while True:
         end_prog()
     
     last_frame_time += refresh_time
-    while (time.clock()<last_frame_time):
+    while (time.process_time()<last_frame_time):
         pass 
 end_prog(0,0)
 # MARKER - END PROGRAM
