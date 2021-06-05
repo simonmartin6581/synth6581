@@ -1,7 +1,7 @@
 Revision History:
 
 June 2nd 2021 - First release 
-
+June 5th 2021 - Uppdated to run on Python 3.7
 
 Description:
 
@@ -23,5 +23,8 @@ SID_multi_player_keys.py
 Plays C64 songs on one or more SID boards
 Knobs and sliders on a Keylab88 have been assigned to control delay, volume and pitch
 
+To compile the C library for the sid_driver.py file to use, type:
+
+gcc -Wall -pthread -shared -o sid_lib.so sid_lib.c -lpigpio 
 
 Longer documentation will be available soon. The source code is extensively commented.
