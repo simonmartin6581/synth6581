@@ -19,8 +19,8 @@ MUTED = 9
 OSC_NAMES = ['SINE','HALF_SINE','HALF_COS','NOISE_SINE','NOISE','PULSE','TRIANGLE','SINE_COS','TRUE_NOISE','MUTED']
 RELEASE_LENGTHS = [0.006,0.024,0.048,0.072,0.114,0.168,0.204,0.240,0.300,0.750,1.500,2.400,3.000,9.000,15.000,24.000]
 
-GOOD_CHANNELS = [0,1,2,3,5] # all good channels 
-BAD_CHANNELS = [4] # these are channels that work but have problems. e.g. poor filter. They get lower priority
+GOOD_CHANNELS = [0,1,2,5] # all good channels 
+BAD_CHANNELS = [3,4] # these are channels that work but have problems. e.g. poor filter. They get lower priority
 
 CHANNELS = GOOD_CHANNELS + BAD_CHANNELS
 

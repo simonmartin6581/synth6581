@@ -77,6 +77,7 @@ class levels:
                 #self.knob_levels = pickle.load(fp)
                 fp.close()
 
+        print (self.knob_names)
         for i in range(len(kls)): # this code needs to not be dependent on MIDI knob numbers
             if i in self.knob_names:
                 #print (i, self.knob_levels[self.knob_names[i]], kls[i])
@@ -98,6 +99,19 @@ class levels:
         self.show_levels()
         return level_list
 
+    
+    def save_patch(self, sid, patch_folder, patch_name):
+        print ("Saving...", patch_name)
+        print (self.knob_levels)
+        kls = [0]*256
+        for i in range(256):
+            if i in self.knob_names:
+                kls[i] = self.knob_levels[self.knob_names[i]]
+        print (kls)
+        print (sid.adsr['a'],sid.adsr['d'],sid.adsr['s'],sid.adsr['r'])
+        with open(patch_folder +'/knob_list_' + patch_name + '.dat', 'wb') as fp:
+            pickle.dump([kls,sid.adsr['a'],sid.adsr['d'],sid.adsr['s'],sid.adsr['r']], fp)
+        fp.close()    
 
     def new_load_patch(self, patch_folder, patch_name):
         self.lev_steady = True
@@ -141,8 +155,8 @@ class levels:
         self.show_levels()
         return level_list
     
-    
-    def save_patch(self, patch_folder, patch_name):
+
+    def new_save_patch(self, patch_folder, patch_name):
         print ("Saving...", patch_name)
         print (self.knob_levels)
         with open(patch_folder +'/knob_list_' + patch_name + '.dat', 'wb') as fp:

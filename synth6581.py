@@ -125,7 +125,7 @@ def end_prog(signal_received, frame):
     patch_name = input("Enter patch name to save or Enter to exit...")
     if patch_name:
         print ("Saving...", patch_name)
-        sid.lvls.save_patch(patch_folder, patch_name)
+        lvls.save_patch(sid,patch_folder, patch_name)
     sys.exit()
 
 signal(SIGINT, end_prog) # This is the interupt handler to ensure ctrl-c closes down gracefully(-ish)

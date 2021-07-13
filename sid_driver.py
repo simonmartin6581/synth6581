@@ -32,6 +32,7 @@ GPIO.setmode(GPIO.BCM)
 import numpy.ctypeslib as ctl
 import ctypes
 import math
+from filt_map import *
 
 MAXCHANS = 8
 INVF = 16.777216 / 256
@@ -156,6 +157,8 @@ class sid:
             else:
                 self.write_sid(ch, reg, int(val))
 
+
+
     def set_filter(self,ch, cut_off, res, filt_on, filt_mode, vol):
         self.filt_mode = filt_mode
         #filtco = int((5000*cut_off)/(1035+cut_off))
@@ -170,7 +173,29 @@ class sid:
             
         self.write_sid(ch, 23, filt_on + int(res) * 16) # Attack/dec
         self.write_sid(ch, 24, int(vol + filt_mode * 16))
-    
+
+
+
+    def set_filter_note(self,ch, note, res, filt_on, filt_mode, vol):
+        self.filt_mode = filt_mode
+        #filtco = int((5000*cut_off)/(1035+cut_off))
+        #filtco = int(cut_off * INVF * 0.5)
+        #filtco = int(468.1662*2.71828**(0.0001*cut_off))
+        if note< 0:
+            note = 0
+        if note >149:
+            note = 149
+        filtco = int(filt_maps[ch][int(note*4)]*0.5)
+
+        if filtco > 2047:
+            filtco = 2047
+        self.write_sid(ch, 22, int(filtco*0.125))
+        self.write_sid(ch, 21, filtco & 7)
+            
+        self.write_sid(ch, 23, filt_on + int(res) * 16) # Attack/dec
+        self.write_sid(ch, 24, int(vol + filt_mode * 16))
+
+
     def set_control_mode(self,control):
         self.control = control
     
@@ -217,7 +242,7 @@ class sid:
     def note_down(self, ch, vc, velocity): #tone, ring_sync, adrs_*, 
         if 'VELOCITY' not in self.control or velocity > 1:
             velocity = 1
-        #print("note down", ch, vc, self.adsr_a,vc, self.adsr_d,vc, self.adsr_s,vc, self.adsr_r)
+        #print("note down", ch, vc)
         self.write_sid(ch, vc*7 + 4, self.tone[vc]*16+self.ring[vc] *4 +self.sync[vc]*2)
         val = int(self.adsr['a'][vc])*16+int(self.adsr['d'][vc])
         self.write_sid(ch, vc*7+5, val)    
@@ -225,8 +250,9 @@ class sid:
         self.write_sid(ch, vc*7+6, val)
         self.write_sid(ch, vc*7 + 4, self.tone[vc] * 16 + self.ring[vc] * 4 + self.sync[vc] * 2 + 1)
         
-    def note_up(self, ch, vc):#tone, ring_sync, 
-        #print("note up", ch, vc, self.tone[vc]+self.ringsync[vc] )
+    def note_up(self, ch, vc):#tone, ring_sync,
+    
+        #print("note up", ch, vc)
         self.write_sid(ch, vc*7 + 4, self.tone[vc] * 16 + self.ring[vc] * 4 + self.sync[vc] * 2 )           
        
     def print_sid(self, ch, t):
